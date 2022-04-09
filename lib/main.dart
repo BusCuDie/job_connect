@@ -5,7 +5,7 @@ import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:job_connect/screens/screens.dart';
 import 'package:job_connect/utils/GradientText/gradientText.dart';
-
+import 'package:job_connect/main_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => isloggin ? HomeScreen() : LoginScreen()));
+            builder: (context) => isloggin ? MainScreen() : LoginScreen()));
   }
 
   void _incrementCounter() {
