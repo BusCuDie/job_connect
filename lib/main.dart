@@ -6,7 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:job_connect/screens/screens.dart';
 import 'package:job_connect/utils/GradientText/gradientText.dart';
 import 'package:job_connect/main_screen.dart';
-void main() {
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -55,13 +61,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   bool isloggin = true;
+  final user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-     _navigateAuthen();
+    print('user hiện tại ${user}');
+      _navigateAuthen();
   }
 
   _navigateAuthen() async {
@@ -69,18 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => isloggin ? MainScreen() : LoginScreen()));
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+            builder: (context) => user != null ? MainScreen() : LoginScreen()));
   }
 
   @override
@@ -92,69 +89,32 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.blue.shade700,
-                Colors.blue.shade400,
-                Colors.white,
-              ]),
-        ),
-        child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(15),
-                margin: EdgeInsets.only(top: 100, bottom: 50),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50.0),
-                  color: Colors.white,
-                ),
-                child: Icon(
-                  Icons.motion_photos_on_rounded,
-                  color: Colors.blue.shade700,
-                  size: 150,
-                ),
-              ),
-              GradientText(
-                'Job Connect',
-                gradient: LinearGradient(colors: [
-                  Colors.red,
-                  Colors.purple,
-                  Colors.black,
-                  // Colors.purple.shade400,
-                ]),
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Dancing Script'
-                ),
-              ),
-                SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Connect your future',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 100,
-              ),
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ]),
-      ),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              'images/logo.png',
+            ),
+            // SizedBox(height: 20,),
+            // Text(
+            //   'Welcom to Job Connect',
+            //   style: GoogleFonts.poppins(
+            //     textStyle: TextStyle(shadows: <Shadow>[
+            //       Shadow(
+            //           offset: Offset(0.0, 4.0),
+            //           blurRadius: 4.0,
+            //           color: Colors.grey)
+            //     ]),
+            //     fontWeight: FontWeight.w700,
+            //     fontSize: 30.0,
+            //   ),
+            // ),
+            SizedBox(height: 100,),
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+          ]),
     );
   }
 }
