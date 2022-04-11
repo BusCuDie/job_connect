@@ -1,23 +1,22 @@
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:job_connect/main_screen.dart';
 import 'package:job_connect/utils/AlertMessage.dart';
 import 'package:job_connect/screens/screens.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignupScreen extends StatefulWidget {
   @override
-  State<LoginScreen> createState() {
+  State<SignupScreen> createState() {
     // TODO: implement createState
-    return LoginState();
+    return SignupState();
   }
 }
 
-class LoginState extends State<LoginScreen> {
+class SignupState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool show = false;
+  bool show = true;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class LoginState extends State<LoginScreen> {
           Align(
             alignment: Alignment.center,
             child: Text(
-              'Sign in to your account',
+              'Hi there,\nWelcom to Job Connect\nCreate new account to continue',
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w600,
                 fontSize: 18.0,
@@ -155,27 +154,24 @@ class LoginState extends State<LoginScreen> {
                         print(
                             'Email: ${emailController.text}\n Password: ${passwordController.text}');
                         try {
-                          final cridential = await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
+                          final UserCredential cridential = await FirebaseAuth
+                              .instance
+                              .createUserWithEmailAndPassword(
                                   email: emailController.text,
                                   password: passwordController.text);
-                          print('Thông tin đăng nhập ${cridential}');
-                          if (cridential != null) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => new MainScreen()),
-                                (route) => false);
+                          if (cridential.user != null) {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=> new DetailSignUpScreen(email: cridential.user!.email,uid:cridential.user!.uid)));
                           }
+                          print('Thông tin đăng kí ${cridential.user}');
                         } on FirebaseAuthException catch (e) {
-                          if (e.code == 'user-not-found') {
+                          if (e.code == 'weak-password') {
                             print('The password provided is too weak.');
+                          } else if (e.code == 'email-already-in-use') {
+                            print('The account already exists for that email.');
                             showAlertDialog(context,
-                                title: 'No user found for that email',
-                                content: 'Please again');
-                          } else if (e.code == 'wrong-password') {
-                            showAlertDialog(context,
-                                title: 'Wrong password',
-                                content: 'Please again');
+                                title:
+                                    'The account already exists for that email',
+                                content: 'Please use an another');
                           }
                         } catch (e) {
                           print(e);
@@ -183,7 +179,7 @@ class LoginState extends State<LoginScreen> {
                       }
                     },
                     child: Text(
-                      "Login",
+                      "Continue",
                       style: TextStyle(fontSize: 20),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -192,13 +188,13 @@ class LoginState extends State<LoginScreen> {
                   ),
                   TextButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
+                        Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (_) => new SignupScreen()));
+                                builder: (context) => new LoginScreen()),
+                            (Route<dynamic> route) => false);
                       },
                       child: Text(
-                        "Create an account ?",
+                        "Have an account ?",
                         style: TextStyle(fontSize: 16),
                       ))
                 ],

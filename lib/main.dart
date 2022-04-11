@@ -77,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
+            // builder: (context) => user != null ? MainScreen() : DetailSignUpScreen()));
             builder: (context) => user != null ? MainScreen() : LoginScreen()));
   }
 
