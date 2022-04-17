@@ -1,34 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:job_connect/screens/post/post_screen.dart';
-import 'package:job_connect/screens/profile/profile_screen.dart';
-import 'package:job_connect/screens/home/home_screen.dart';
-class MainScreen extends StatefulWidget{
-   const MainScreen({Key? key}) : super(key: key);
+import 'package:flutter/services.dart';
+import 'package:job_connect/screens/screens.dart';
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
   @override
-  State<MainScreen>  createState() => MainScreenState(); 
+  State<MainScreen> createState() => MainScreenState();
 }
+
 class MainScreenState extends State<MainScreen> {
   int currentIndex = 0;
-  final screen = [HomeScreen(), PostScreen(), ProfileScreen()];
+  final screen = [HomeScreen(), ConnectScreen(), MessageScreen(), ProfileScreen()];
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      body: screen.elementAt(currentIndex),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: (index) => {
-            print(index),
-            setState(() {
-              currentIndex = index;
-            })
-          },
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.portrait_rounded), label: 'Profile')
-          ]),
+    return Material(
+      child: Scaffold(
+
+        body: SafeArea(child: screen.elementAt(currentIndex)),
+        bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: currentIndex,
+            onTap: (index) => {
+                  print(index),
+                  setState(() {
+                    currentIndex = index;
+                  })
+                },
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.people_alt), label: 'Connect'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.message), label: 'Message'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.portrait_rounded), label: 'Profile')
+            ]),
+      ),
     );
   }
 }

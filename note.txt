@@ -1,0 +1,4 @@
+sẽ có checkbox coi xem có phải là company hay k 
+nếu là company thì sẽ k có mục thông tin cá nhân 
+và nếu là company thì sẽ k có phần tạo CV và phần cập nhật thông tin cá nhân 
+còn company thì sẽ có phần thêm thông tin về công ty 

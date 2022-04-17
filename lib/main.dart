@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     print('user hiện tại ${user}');
-      _navigateAuthen();
+    _navigateAuthen();
   }
 
   _navigateAuthen() async {
@@ -90,6 +90,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0,
+        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.blue),
+        elevation: 0,
+      ),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -111,7 +116,9 @@ class _MyHomePageState extends State<MyHomePage> {
             //     fontSize: 30.0,
             //   ),
             // ),
-            SizedBox(height: 100,),
+            SizedBox(
+              height: 100,
+            ),
             CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
             ),

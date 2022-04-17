@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:job_connect/main_screen.dart';
 import 'package:job_connect/utils/AlertMessage.dart';
 import 'package:job_connect/screens/screens.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() {
@@ -39,25 +39,6 @@ class LoginState extends State<LoginScreen> {
               width: 150,
             ),
           ),
-
-          // Padding(
-          //   padding: EdgeInsets.only(
-          //     left: 30,
-          //   ),
-          //   child: Text(
-          //     'Welcom Back!!!',
-          //     style: GoogleFonts.poppins(
-          //       textStyle: TextStyle(shadows: <Shadow>[
-          //         Shadow(
-          //             offset: Offset(0.0, 4.0),
-          //             blurRadius: 4.0,
-          //             color: Colors.grey)
-          //       ]),
-          //       fontWeight: FontWeight.w700,
-          //       fontSize: 30.0,
-          //     ),
-          //   ),
-          // ),
           SizedBox(
             height: 20,
           ),
@@ -98,10 +79,6 @@ class LoginState extends State<LoginScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Email is empty, please enter';
-                      } else if (!RegExp(
-                              r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                          .hasMatch(value)) {
-                        return 'Email is invalid, please again';
                       }
                       return null;
                     },
@@ -139,10 +116,6 @@ class LoginState extends State<LoginScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password is empty, please enter';
-                        } else if (!RegExp(
-                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
-                            .hasMatch(value)) {
-                          return 'Password must have at least 8 character, include number,\nboth uppercase and lowercase letter';
                         }
                         return null;
                       }),
@@ -161,6 +134,14 @@ class LoginState extends State<LoginScreen> {
                                   password: passwordController.text);
                           print('Thông tin đăng nhập ${cridential}');
                           if (cridential != null) {
+                            FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .get()
+                                .then((documentSnapshot) => {
+                                      //  print('current user : ${documentSnapshot.data()?["uid"]}')
+                                     
+                                    });
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (context) => new MainScreen()),

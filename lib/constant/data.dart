@@ -24,3 +24,24 @@ const List<String> industryList = [
   "Transportation",
   "Service Industry",
 ];
+
+//Workplace Type 
+
+const List<String> workplaceList = [
+"On-site",
+"Hybrid",
+"Remote",
+];
+
+// Job type
+
+const List<String> jobTypeList = [
+"Full-time",
+"Part-time",
+"Contract",
+"Internship",
+"Other",
+];
+
+
+

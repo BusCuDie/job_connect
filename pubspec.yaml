@@ -41,6 +41,14 @@ dependencies:
   cloud_firestore: ^3.1.11
   firebase_storage: ^10.2.11
   dropdown_button2: ^1.4.0
+  file_picker: ^4.5.1
+  flutter_document_picker: ^4.0.1
+  flutter_pdfview: ^1.2.2
+  webview_flutter: ^3.0.2
+  syncfusion_flutter_pdfviewer: ^20.1.48-beta.1
+  avoid_keyboard: ^0.3.0
+  country_state_city_picker: ^1.2.8
+  carousel_slider: ^4.0.0
 
 dev_dependencies:
   flutter_test:
