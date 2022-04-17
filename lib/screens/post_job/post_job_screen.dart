@@ -26,8 +26,7 @@ class PostJobScreenState extends State<PostJobScreen> {
   String? jobType = "Full-time";
   @override
   Widget build(BuildContext context) {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    // TODO: implement build
+    final uid = FirebaseAuth.instance.currentUser!.uid;    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text('Create a job'),
@@ -271,7 +270,11 @@ class PostJobScreenState extends State<PostJobScreen> {
                             'salary': salaryController.text,
                             'experience': experienceController.text,
                             'description': descriptionController.text,
-                            'createdBy': uid
+                            'createdBy': uid,
+                            "createByName": FirebaseAuth.instance.currentUser!.displayName,
+                            "application":0,
+                            "jobApply":[],
+                            'isClose' : false,
                           }).then((value) {
                             print('value ${value.id}');
                             showAlertDialog(context,

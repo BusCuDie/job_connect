@@ -3,6 +3,8 @@ import "package:firebase_auth/firebase_auth.dart";
 import 'package:job_connect/screens/screens.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/foundation.dart';
+import 'package:job_connect/models/job.dart';
 
 const banner = [
   "images/banner2.png",
@@ -18,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   String name = "";
   String avatar = "";
-  List<dynamic> jobs = [];
   @override
   void initState() {
     super.initState();
@@ -30,14 +31,16 @@ class HomeScreenState extends State<HomeScreen> {
         .doc(FirebaseAuth.instance.currentUser?.uid)
         .get()
         .then((value) {
-      print(value);
+      if (kDebugMode) {
+        print(value);
+      }
       setState(() {
         name = value.data()?["displayName"];
         avatar = value.data()?["photoUrl"];
       });
     });
     return Padding(
-      padding: EdgeInsets.only(top: 3, bottom:10, right: 20,left: 16),
+      padding: EdgeInsets.only(top: 3, bottom: 10, right: 20, left: 16),
       child: Row(
         children: [
           ClipRRect(
@@ -68,9 +71,69 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  getJob(){
-
+  List<Map<String, dynamic>> data = [];
+  getJobs() {
+    FirebaseFirestore.instance.collection("jobs").get().then((value) {
+      setState(() {
+        data = value.docs.map<Map<String, dynamic>>((e) {
+          return {"id": e.id, ...e.data()};
+        }).toList();
+      });
+    });
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: data.length,
+        itemBuilder: ((context, index) => Card(
+            elevation: 7,
+            child: Padding(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data[index]["title"],
+                          style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                            '${data[index]["location"]} - ${data[index]["type"]}'),
+                      ]),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => DetailJobScreen(
+                                      job: data[index],
+                                    )));
+                          },
+                          child: Text('Detail')),
+                      Text(
+                        '${data[index]["salary"]} \$',
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.w700),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            ))));
   }
+
+  // Stream<List<Jobs>> readJobs() => FirebaseFirestore.instance
+  //     .collection("jobs")
+  //     .snapshots()
+  //     .map((snapShots) => snapShots.docs.map((doc) => Jobs.fromJson(doc.data())).toList());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +141,7 @@ class HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 10, bottom: 25,left: 8,right: 8),
+            padding: EdgeInsets.only(top: 10, bottom: 25, left: 8, right: 8),
             child: Column(children: [
               getName(),
               Container(
@@ -128,11 +191,28 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             width: MediaQuery.of(context).size.width,
-            child: Column(
-
-            ),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text(
+                'Job for you',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              getJobs(),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PostJobScreen()));
+                  },
+                  child: const Text('get Job'))
+            ]),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
