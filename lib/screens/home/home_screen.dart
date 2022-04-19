@@ -137,90 +137,93 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => PostJobScreen()));
+            },
+            backgroundColor: Colors.blue),
         body: SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 10, bottom: 25, left: 8, right: 8),
-            child: Column(children: [
-              getName(),
+          child: Column(
+            children: [
               Container(
-                width: MediaQuery.of(context).size.width,
-                height: 150,
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    // aspectRatio: 16 / 9,
-                    viewportFraction: 1,
-                    initialPage: 0,
-                    enableInfiniteScroll: true,
-                    reverse: true,
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 5),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enlargeCenterPage: true,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                  items: banner.map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return ClipRRect(
-                          child: Image.asset(
-                            i,
-                            height: 300,
-                          ),
-                          borderRadius: BorderRadius.circular(20),
+                padding:
+                    EdgeInsets.only(top: 10, bottom: 25, left: 8, right: 8),
+                child: Column(children: [
+                  getName(),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 150,
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        // aspectRatio: 16 / 9,
+                        viewportFraction: 1,
+                        initialPage: 0,
+                        enableInfiniteScroll: true,
+                        reverse: true,
+                        autoPlay: true,
+                        autoPlayInterval: Duration(seconds: 5),
+                        autoPlayAnimationDuration: Duration(milliseconds: 800),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enlargeCenterPage: true,
+                        scrollDirection: Axis.horizontal,
+                      ),
+                      items: banner.map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return ClipRRect(
+                              child: Image.asset(
+                                i,
+                                height: 300,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            );
+                          },
                         );
-                      },
-                    );
-                  }).toList(),
-                ),
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 1,
-                    blurRadius: 15,
-                    offset: Offset(0, 8),
-                    // Shadow position
+                      }).toList(),
+                    ),
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 15,
+                        offset: Offset(0, 8),
+                        // Shadow position
+                      ),
+                    ]),
                   ),
                 ]),
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.7),
+                ),
               ),
-            ]),
-            decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.7),
-            ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Job for you',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      getJobs(),
+                    ]),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+              )
+            ],
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            width: MediaQuery.of(context).size.width,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                'Job for you',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              getJobs(),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PostJobScreen()));
-                  },
-                  child: const Text('get Job'))
-            ]),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
-          )
-        ],
-      ),
-    ));
+        ));
   }
 }
